@@ -1131,8 +1131,13 @@ button, input, textarea {
 /* Contact Layout styles */
 .contact-wrapper {
     display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     gap: 4rem;
+}
+
+.contact-info-card,
+.contact-form-wrap {
+    min-width: 0;
 }
 
 .contact-info-card {
@@ -1174,6 +1179,7 @@ button, input, textarea {
     justify-content: center;
     font-size: 1.2rem;
     border: 1px solid rgba(0, 242, 254, 0.15);
+    flex-shrink: 0;
 }
 
 .contact-details-item span {
@@ -1189,6 +1195,12 @@ button, input, textarea {
     margin: 0;
     font-size: 1.05rem;
     font-weight: 500;
+}
+
+.contact-details-item p,
+.contact-details-item a {
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .contact-details-item a {
@@ -1221,13 +1233,14 @@ button, input, textarea {
 .form-group input,
 .form-group textarea {
     width: 100%;
+    max-width: 100%;
     background-color: rgba(6, 8, 20, 0.5);
     border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 0.8rem 1rem;
     color: var(--text-primary);
     font-family: var(--font-body);
-    font-size: 0.95rem;
+    font-size: max(0.95rem, 16px);
     transition: var(--transition-smooth);
 }
 
@@ -1421,9 +1434,10 @@ button, input, textarea {
         top: 80px;
         left: -100%;
         width: 100%;
-        height: calc(100vh - 80px);
+        bottom: 0;
         background-color: rgba(6, 8, 20, 0.98);
         backdrop-filter: blur(15px);
+        overflow-y: auto;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -1434,6 +1448,10 @@ button, input, textarea {
     
     .nav-links.active {
         left: 0;
+    }
+    
+    body:has(.nav-links.active) {
+        overflow: hidden;
     }
     
     .nav-link {
@@ -1483,7 +1501,7 @@ button, input, textarea {
     }
     
     .contact-wrapper {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 3rem;
     }
     
@@ -1521,7 +1539,6 @@ button, input, textarea {
 
     .nav-links {
         top: 68px;
-        height: calc(100vh - 68px);
     }
 
     .logo {
