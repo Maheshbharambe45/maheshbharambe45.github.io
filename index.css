@@ -1533,8 +1533,25 @@ button, input, textarea {
         letter-spacing: -0.5px;
     }
 
+    .hero-title {
+        font-size: clamp(1.9rem, 9vw, 2.4rem);
+        letter-spacing: -0.5px;
+        margin-bottom: 0.6rem;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1.05rem, 5vw, 1.3rem);
+        margin-bottom: 1rem;
+        min-height: 34px;
+    }
+
     .hero-description {
         font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .badge-container {
+        margin-bottom: 1rem;
     }
 
     .hero-cta-group {
@@ -1554,12 +1571,6 @@ button, input, textarea {
     .console-body {
         padding: 1.1rem;
         font-size: 0.78rem;
-    }
-
-    .stats-line {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
     }
 
     .section-header {
