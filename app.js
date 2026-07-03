@@ -329,8 +329,28 @@ bridging the gap between software developers and IT operations.`;
                 submitText.textContent = 'Deploying Message...';
                 submitIcon.className = 'fa-solid fa-spinner fa-spin';
 
-                // Simulate network latency (DevOps deployment style!)
-                setTimeout(() => {
+                const submission = {
+                    name: formName.value.trim(),
+                    email: formEmail.value.trim(),
+                    subject: formSubject.value.trim(),
+                    message: formMessage.value.trim(),
+                    timestamp: new Date().toISOString()
+                };
+
+                // Send the message to your inbox via Formspree.
+                // 1. Go to https://formspree.io, sign up free, create a new form.
+                // 2. Copy the endpoint it gives you (looks like https://formspree.io/f/xxxxxxxx)
+                // 3. Paste it in place of 'YOUR_FORM_ID' below.
+                const FORMSPREE_ENDPOINT = 'https://formspree.io/f/maqglkpg';
+
+                fetch(FORMSPREE_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' },
+                    body: new FormData(contactForm)
+                })
+                .then((response) => {
+                    if (!response.ok) throw new Error('Request failed: ' + response.status);
+
                     // Reset Button State
                     formSubmitBtn.disabled = false;
                     submitText.textContent = 'Message Deployed!';
@@ -338,15 +358,7 @@ bridging the gap between software developers and IT operations.`;
                     formSubmitBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
                     formSubmitBtn.style.color = '#fff';
 
-                    // Save locally for reference
-                    const submission = {
-                        name: formName.value.trim(),
-                        email: formEmail.value.trim(),
-                        subject: formSubject.value.trim(),
-                        message: formMessage.value.trim(),
-                        timestamp: new Date().toISOString()
-                    };
-                    
+                    // Keep a local copy too, for your own reference
                     const existingSubmissions = JSON.parse(localStorage.getItem('contact_submissions') || '[]');
                     existingSubmissions.push(submission);
                     localStorage.setItem('contact_submissions', JSON.stringify(existingSubmissions));
@@ -367,8 +379,24 @@ bridging the gap between software developers and IT operations.`;
                         submitIcon.className = 'fa-regular fa-paper-plane';
                         formSubmitBtn.removeAttribute('style');
                     }, 3000);
+                })
+                .catch((err) => {
+                    formSubmitBtn.disabled = false;
+                    submitText.textContent = 'Failed — Try Again';
+                    submitIcon.className = 'fa-solid fa-triangle-exclamation';
+                    formSubmitBtn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+                    formSubmitBtn.style.color = '#fff';
 
-                }, 1500);
+                    if (terminalBody) {
+                        createOutputLine(`<span class="c-red">[ERROR]</span> Mail pipeline failed: ${err.message}`);
+                    }
+
+                    setTimeout(() => {
+                        submitText.textContent = 'Send Message';
+                        submitIcon.className = 'fa-regular fa-paper-plane';
+                        formSubmitBtn.removeAttribute('style');
+                    }, 3000);
+                });
             }
         });
     }
