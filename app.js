@@ -413,4 +413,328 @@ bridging the gap between software developers and IT operations.`;
         const formGroup = inputElement.parentElement;
         formGroup.classList.remove('invalid');
     }
+
+    // ----------------------------------------------------
+    // 6. Spotlight Cursor Tracking for Cards
+    // ----------------------------------------------------
+    const glassCards = document.querySelectorAll('.glass-card');
+    glassCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // ----------------------------------------------------
+    // 7. Hero Console Tabs and Boot Script
+    // ----------------------------------------------------
+    const tabBtnSysinfo = document.getElementById('tabBtnSysinfo');
+    const tabBtnPipeline = document.getElementById('tabBtnPipeline');
+    const tabSysinfo = document.getElementById('tabSysinfo');
+    const tabPipeline = document.getElementById('tabPipeline');
+    const sysinfoLogs = document.getElementById('sysinfoLogs');
+
+    if (tabBtnSysinfo && tabBtnPipeline && tabSysinfo && tabPipeline) {
+        tabBtnSysinfo.addEventListener('click', () => {
+            tabBtnSysinfo.classList.add('active');
+            tabBtnPipeline.classList.remove('active');
+            tabSysinfo.style.display = 'block';
+            tabPipeline.style.display = 'none';
+        });
+
+        tabBtnPipeline.addEventListener('click', () => {
+            tabBtnPipeline.classList.add('active');
+            tabBtnSysinfo.classList.remove('active');
+            tabPipeline.style.display = 'block';
+            tabSysinfo.style.display = 'none';
+        });
+    }
+
+    const sysinfoLines = [
+        { text: 'Initializing metrics collector...', delay: 300, type: 'gray' },
+        { text: '✓ Connection to AWS Established [ap-south-1]', delay: 700, type: 'green' },
+        { text: '✓ Kubernetes Cluster Status: <span class="status-pill text-green">HEALTHY</span>', delay: 1100, type: 'green' },
+        { text: '✓ Active Role: DevOps Engineer at SimplyFI Innovations', delay: 1500, type: 'green' },
+        { text: '✓ Educational Milestone: MCA \'26 Candidate', delay: 1900, type: 'green' },
+        { text: '<div class="stats-line"><span class="c-teal">Docker Images:</span> 12 | <span class="c-teal">Pipelines Run:</span> 1,248 | <span class="c-teal">Uptime:</span> 99.99%</div>', delay: 2300, isHtml: true }
+    ];
+
+    function playSysinfo() {
+        if (!sysinfoLogs) return;
+        sysinfoLogs.innerHTML = '';
+        sysinfoLines.forEach(line => {
+            setTimeout(() => {
+                const p = document.createElement('p');
+                p.style.marginBottom = '0.5rem';
+                if (line.isHtml) {
+                    p.innerHTML = line.text;
+                } else {
+                    const colorClass = line.type === 'green' ? 'c-green' : (line.type === 'gray' ? 'c-gray' : '');
+                    const prefix = line.type === 'green' ? '<span class="c-green">✓</span> ' : '';
+                    const coreText = line.text.replace('✓ ', '');
+                    p.innerHTML = `${prefix}<span class="${colorClass}">${coreText}</span>`;
+                }
+                sysinfoLogs.appendChild(p);
+            }, line.delay);
+        });
+    }
+
+    // Auto-run sysinfo script on page load
+    playSysinfo();
+
+    // ----------------------------------------------------
+    // 8. CI/CD Pipeline Simulator Loop
+    // ----------------------------------------------------
+    const btnTriggerPipeline = document.getElementById('btnTriggerPipeline');
+    const pipelineLogs = document.getElementById('pipelineLogs');
+    const pipelineStatusText = document.getElementById('pipelineStatusText');
+    
+    // Nodes & Connectors
+    const nodes = {
+        source: document.getElementById('node-source'),
+        build: document.getElementById('node-build'),
+        scan: document.getElementById('node-scan'),
+        deploy: document.getElementById('node-deploy'),
+        monitor: document.getElementById('node-monitor')
+    };
+
+    const connectors = {
+        conn1: document.getElementById('conn-1'),
+        conn2: document.getElementById('conn-2'),
+        conn3: document.getElementById('conn-3'),
+        conn4: document.getElementById('conn-4')
+    };
+
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    function logToPipeline(text, type = 'info') {
+        if (!pipelineLogs) return;
+        const p = document.createElement('p');
+        p.style.margin = '0 0 0.35rem 0';
+        let colorClass = 'c-gray';
+        if (type === 'success') colorClass = 'c-green';
+        if (type === 'warning') colorClass = 'c-yellow';
+        if (type === 'error') colorClass = 'c-red';
+        if (type === 'cmd') colorClass = 'c-teal';
+        p.innerHTML = `<span class="${colorClass}">${text}</span>`;
+        pipelineLogs.appendChild(p);
+        pipelineLogs.scrollTop = pipelineLogs.scrollHeight;
+    }
+
+    async function runPipelineSimulation() {
+        if (!btnTriggerPipeline || !pipelineLogs || !pipelineStatusText) return;
+
+        // Reset state
+        btnTriggerPipeline.disabled = true;
+        pipelineStatusText.textContent = 'Executing...';
+        pipelineStatusText.style.color = 'var(--teal)';
+        pipelineLogs.innerHTML = '';
+
+        // Reset nodes & connectors classes
+        Object.values(nodes).forEach(n => {
+            if (n) n.className = 'pipeline-node';
+        });
+        Object.values(connectors).forEach(c => {
+            if (c) c.className = 'pipeline-connector';
+        });
+
+        // Stage 1: Commit
+        logToPipeline('$ git commit -m "feat(rollout): optimize replica count" && git push origin main', 'cmd');
+        await sleep(400);
+        if (nodes.source) nodes.source.classList.add('active');
+        logToPipeline('[source] Fetching commit delta from remote...', 'info');
+        await sleep(600);
+        logToPipeline('[source] Commit verified: sha1 9f3e4b09', 'success');
+        logToPipeline('[source] Triggering pipeline execution via webhook...', 'info');
+        await sleep(500);
+        if (nodes.source) {
+            nodes.source.classList.remove('active');
+            nodes.source.classList.add('success');
+        }
+
+        // Connector 1 Pulse
+        if (connectors.conn1) connectors.conn1.classList.add('running');
+        await sleep(1000);
+        if (connectors.conn1) connectors.conn1.classList.add('success');
+
+        // Stage 2: Build
+        if (nodes.build) nodes.build.classList.add('active');
+        logToPipeline('[build] Cloning source code repository...', 'info');
+        await sleep(500);
+        logToPipeline('[build] Initiating docker container build process...', 'info');
+        logToPipeline('[build] Running multi-stage Dockerfile executor...', 'info');
+        await sleep(500);
+        logToPipeline('[build] Docker: Step 1/8 FROM node:20-slim', 'info');
+        logToPipeline('[build] Docker: Step 6/8 RUN npm run build', 'info');
+        await sleep(700);
+        logToPipeline('[build] Built container: mahesh45/portfolio:v2.1.0', 'success');
+        logToPipeline('[build] Uploading container image to Docker Hub registry...', 'info');
+        await sleep(600);
+        logToPipeline('[build] Image pushed to Docker Hub successfully.', 'success');
+        if (nodes.build) {
+            nodes.build.classList.remove('active');
+            nodes.build.classList.add('success');
+        }
+
+        // Connector 2 Pulse
+        if (connectors.conn2) connectors.conn2.classList.add('running');
+        await sleep(1000);
+        if (connectors.conn2) connectors.conn2.classList.add('success');
+
+        // Stage 3: Scan (Security)
+        if (nodes.scan) nodes.scan.classList.add('active');
+        logToPipeline('[scan] Initializing container image vulnerability scanner (Trivy)...', 'info');
+        await sleep(600);
+        logToPipeline('[scan] Scanning mahesh45/portfolio:v2.1.0...', 'info');
+        await sleep(500);
+        logToPipeline('[scan] Trivy: 0 Critical | 1 High | 4 Medium vulnerabilities detected', 'success');
+        logToPipeline('[scan] Security Gate Passed. Quality threshold matches rules.', 'success');
+        if (nodes.scan) {
+            nodes.scan.classList.remove('active');
+            nodes.scan.classList.add('success');
+        }
+
+        // Connector 3 Pulse
+        if (connectors.conn3) connectors.conn3.classList.add('running');
+        await sleep(1000);
+        if (connectors.conn3) connectors.conn3.classList.add('success');
+
+        // Stage 4: Deploy
+        if (nodes.deploy) nodes.deploy.classList.add('active');
+        logToPipeline('[deploy] Establishing secure context connection to AWS EKS...', 'info');
+        await sleep(500);
+        logToPipeline('[deploy] Fetching current deployment manifest files...', 'info');
+        logToPipeline('[deploy] kubectl apply -f k8s/deployment.yaml', 'cmd');
+        await sleep(600);
+        logToPipeline('[deploy] deployment.apps/portfolio-app rolling update initiated', 'info');
+        logToPipeline('[deploy] Waiting for replicas rollout status...', 'info');
+        await sleep(500);
+        logToPipeline('[deploy] Replica 1/2: Running. Replica 2/2: Running.', 'success');
+        logToPipeline('[deploy] Service cluster ip active: routing rules configured.', 'success');
+        if (nodes.deploy) {
+            nodes.deploy.classList.remove('active');
+            nodes.deploy.classList.add('success');
+        }
+
+        // Connector 4 Pulse
+        if (connectors.conn4) connectors.conn4.classList.add('running');
+        await sleep(1000);
+        if (connectors.conn4) connectors.conn4.classList.add('success');
+
+        // Stage 5: Monitor
+        if (nodes.monitor) nodes.monitor.classList.add('active');
+        logToPipeline('[monitor] Syncing alert rules to Alertmanager...', 'info');
+        await sleep(500);
+        logToPipeline('[monitor] Fetching container HTTP probe status...', 'info');
+        await sleep(700);
+        logToPipeline('[monitor] Healthcheck endpoint /health: 200 OK', 'success');
+        logToPipeline('[monitor] Prometheus metrics scraping activated.', 'success');
+        if (nodes.monitor) {
+            nodes.monitor.classList.remove('active');
+            nodes.monitor.classList.add('success');
+        }
+
+        logToPipeline('&nbsp;', 'info');
+        logToPipeline('✓ PIPELINE COMPLETION STATUS: SUCCESS (Code: 200 OK)', 'success');
+        logToPipeline('All stages finalized in 10.42 seconds.', 'success');
+        
+        pipelineStatusText.textContent = 'Pipeline Succeeded ✓';
+        pipelineStatusText.style.color = '#10b981';
+        btnTriggerPipeline.disabled = false;
+    }
+
+    if (btnTriggerPipeline) {
+        btnTriggerPipeline.addEventListener('click', runPipelineSimulation);
+    }
+
+    // ----------------------------------------------------
+    // 9. DevOps Custom Cursor & Particle Emitter
+    // ----------------------------------------------------
+    const cursor = document.getElementById('customCursor');
+    const follower = document.getElementById('cursorFollower');
+
+    // Only activate cursor if not a mobile device (based on screen width/touch checks)
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isDesktop = window.innerWidth > 768 && !isTouchDevice;
+
+    if (cursor && follower && isDesktop) {
+        let mouseX = 0;
+        let mouseY = 0;
+        let followerX = 0;
+        let followerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Instantly position the small core pointer dot
+            cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+        });
+
+        // Use requestAnimationFrame for a smooth, laggy trailing ring follower
+        function updateFollower() {
+            followerX += (mouseX - followerX) * 0.12;
+            followerY += (mouseY - followerY) * 0.12;
+
+            follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%)`;
+            
+            requestAnimationFrame(updateFollower);
+        }
+        requestAnimationFrame(updateFollower);
+
+        // Event delegation on document to dynamically catch hovers on any interactive element
+        const hoverSelector = 'a, button, input, textarea, select, .interactive-chip, .btn, .nav-link, .console-tab, #clearTerminalBtn, .terminal-btn-quick';
+        
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.closest(hoverSelector)) {
+                cursor.classList.add('hovered');
+                follower.classList.add('hovered');
+            }
+        });
+        
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.closest(hoverSelector)) {
+                cursor.classList.remove('hovered');
+                follower.classList.remove('hovered');
+            }
+        });
+
+        // Click effect: spawn digital particle trail of 1s, 0s, and brackets
+        document.addEventListener('click', (e) => {
+            const particleCount = 6;
+            const characters = ['0', '1', '{', '}', '+', '-', '<', '>', '/'];
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('span');
+                particle.className = 'cursor-particle';
+                
+                // Pick a random DevOps symbol
+                particle.textContent = characters[Math.floor(Math.random() * characters.length)];
+                
+                // Position at current cursor coordinates
+                particle.style.left = `${e.clientX}px`;
+                particle.style.top = `${e.clientY}px`;
+                
+                // Random drift angles and distances
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 30 + Math.random() * 50;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                // Assign CSS custom variables for keyframe interpolation
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                
+                document.body.appendChild(particle);
+                
+                // Clean up DOM after animation completes
+                setTimeout(() => {
+                    particle.remove();
+                }, 800);
+            }
+        });
+    }
 });
