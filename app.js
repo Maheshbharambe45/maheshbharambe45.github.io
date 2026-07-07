@@ -459,7 +459,7 @@ bridging the gap between software developers and IT operations.`;
         { text: '✓ Kubernetes Cluster Status: <span class="status-pill text-green">HEALTHY</span>', delay: 1100, type: 'green' },
         { text: '✓ Active Role: DevOps Engineer at SimplyFI Innovations', delay: 1500, type: 'green' },
         { text: '✓ Educational Milestone: MCA \'26 Candidate', delay: 1900, type: 'green' },
-        { text: '<div class="stats-line"><span class="c-teal">Docker Images:</span> 12 | <span class="c-teal">Pipelines Run:</span> 1,248 | <span class="c-teal">Uptime:</span> 99.99%</div>', delay: 2300, isHtml: true }
+        { text: '<div class="stats-line"><span class="stat-item"><span class="c-teal">Docker Images:</span> 12</span> <span class="stat-divider">|</span> <span class="stat-item"><span class="c-teal">Pipelines Run:</span> 1,248</span> <span class="stat-divider">|</span> <span class="stat-item"><span class="c-teal">Uptime:</span> 99.99%</span></div>', delay: 2300, isHtml: true }
     ];
 
     function playSysinfo() {
