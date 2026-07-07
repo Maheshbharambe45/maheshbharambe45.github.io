@@ -656,11 +656,11 @@ bridging the gap between software developers and IT operations.`;
     const cursor = document.getElementById('customCursor');
     const follower = document.getElementById('cursorFollower');
 
-    // Only activate cursor if not a mobile device (based on screen width/touch checks)
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    const isDesktop = window.innerWidth > 768 && !isTouchDevice;
+    // Only activate cursor if not a mobile device (based on screen width)
+    const isDesktop = window.innerWidth > 768;
 
     if (cursor && follower && isDesktop) {
+        document.body.classList.add('custom-cursor-active');
         let mouseX = 0;
         let mouseY = 0;
         let followerX = 0;
