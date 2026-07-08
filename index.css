@@ -17,6 +17,10 @@
     
     --border-color: rgba(255, 255, 255, 0.08);
     --border-glow: rgba(0, 242, 254, 0.3);
+    --grid-color: rgba(255, 255, 255, 0.02);
+    --header-bg: rgba(6, 8, 20, 0.75);
+    --header-border: rgba(255, 255, 255, 0.08);
+    --header-shadow: rgba(0, 0, 0, 0.28);
     
     --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -24,6 +28,22 @@
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --max-width: 1200px;
+}
+
+body[data-theme="light"] {
+    --bg-main: #f4f7ff;
+    --bg-darker: #e8eefc;
+    --bg-card: rgba(255, 255, 255, 0.84);
+    --bg-terminal: #eef2ff;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    --border-color: rgba(15, 23, 42, 0.1);
+    --border-glow: rgba(0, 242, 254, 0.25);
+    --grid-color: rgba(15, 23, 42, 0.05);
+    --header-bg: rgba(255, 255, 255, 0.82);
+    --header-border: rgba(15, 23, 42, 0.08);
+    --header-shadow: rgba(15, 23, 42, 0.12);
 }
 
 /* Base reset & typography */
@@ -79,8 +99,8 @@ button, input, textarea {
     width: 100%;
     height: 100%;
     background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
     background-size: 50px 50px;
     background-position: center;
 }
@@ -288,9 +308,10 @@ button, input, textarea {
     width: 100%;
     height: 80px;
     z-index: 100;
-    background: rgba(6, 8, 20, 0.75);
+    background: var(--header-bg);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--header-border);
+    box-shadow: 0 8px 24px var(--header-shadow);
     transition: var(--transition-smooth);
 }
 
@@ -308,16 +329,18 @@ button, input, textarea {
 .logo {
     font-family: var(--font-heading);
     font-size: clamp(1.05rem, 4vw, 1.4rem);
-    font-weight: 700;
-    letter-spacing: -0.5px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
     color: var(--text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-shadow: 0 0 18px rgba(0, 242, 254, 0.12);
 }
 
 .logo-accent {
     color: var(--teal);
+    text-shadow: 0 0 18px rgba(0, 242, 254, 0.24);
 }
 
 .nav-links {
@@ -358,6 +381,33 @@ button, input, textarea {
     align-items: center;
     gap: clamp(0.75rem, 3vw, 1.5rem);
     flex-shrink: 0;
+}
+
+.theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.theme-toggle-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--teal);
+    background: rgba(0, 242, 254, 0.08);
+    transform: translateY(-1px);
+}
+
+.theme-toggle-btn i {
+    color: var(--teal);
+    font-size: 0.95rem;
 }
 
 .terminal-btn-quick {

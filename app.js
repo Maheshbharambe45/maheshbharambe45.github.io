@@ -1,4 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    const initialTheme = savedTheme === 'light' ? 'light' : 'dark';
+
+    const applyTheme = (theme) => {
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+
+        const themeToggle = document.getElementById('themeToggle');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        const themeToggleLabel = document.getElementById('themeToggleLabel');
+
+        if (themeToggle && themeToggleIcon && themeToggleLabel) {
+            themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+            themeToggleIcon.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+            themeToggleLabel.textContent = theme === 'dark' ? 'Dark' : 'Light';
+        }
+    };
+
+    applyTheme(initialTheme);
+
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const nextTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(nextTheme);
+        });
+    }
+
     // ----------------------------------------------------
     // 1. Hero Typewriter Effect
     // ----------------------------------------------------
