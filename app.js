@@ -801,6 +801,131 @@ Type <span class="c-yellow">deploy</span> to trigger a fresh rollout!`;
     }
 
     // ----------------------------------------------------
+    // 10. Live Visitor Counter
+    // ----------------------------------------------------
+    function initLiveVisitorCounter() {
+        const visitorCountEl = document.getElementById('liveVisitorCount');
+        const visitorActiveEl = document.getElementById('liveVisitorActive');
+        if (!visitorCountEl || !visitorActiveEl) return;
+
+        const storageKey = 'portfolio-visitor-state';
+        const channelName = 'portfolio-visitor-channel';
+        const sessionId = sessionStorage.getItem('portfolio-visitor-session-id') || `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+        sessionStorage.setItem('portfolio-visitor-session-id', sessionId);
+
+        const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel(channelName) : null;
+        const formatCount = (value) => new Intl.NumberFormat('en-US').format(value);
+
+        function readState() {
+            try {
+                const saved = localStorage.getItem(storageKey);
+                if (!saved) return { total: 128, sessions: {} };
+
+                const parsed = JSON.parse(saved);
+                return {
+                    total: Number(parsed.total) || 128,
+                    sessions: parsed.sessions && typeof parsed.sessions === 'object' ? parsed.sessions : {}
+                };
+            } catch (error) {
+                console.warn('Unable to read visitor state:', error);
+                return { total: 128, sessions: {} };
+            }
+        }
+
+        function persistState(state) {
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(state));
+            } catch (error) {
+                console.warn('Unable to store visitor state:', error);
+            }
+        }
+
+        function pruneSessions(state) {
+            const now = Date.now();
+            const validSessions = {};
+
+            Object.entries(state.sessions || {}).forEach(([id, timestamp]) => {
+                if (now - Number(timestamp) < 15000) {
+                    validSessions[id] = timestamp;
+                }
+            });
+
+            state.sessions = validSessions;
+            state.active = Object.keys(validSessions).length;
+            return state;
+        }
+
+        function updateDisplay(state) {
+            visitorCountEl.textContent = formatCount(state.total || 128);
+            visitorActiveEl.textContent = String(Math.max(1, state.active || 1));
+        }
+
+        function broadcastState(state) {
+            if (channel) {
+                channel.postMessage({ type: 'visitor-sync', state });
+            }
+        }
+
+        function syncState() {
+            let state = readState();
+            state = pruneSessions(state);
+
+            const isNewSession = !sessionStorage.getItem('portfolio-visitor-counted');
+            if (isNewSession) {
+                state.total = (state.total || 128) + 1;
+                sessionStorage.setItem('portfolio-visitor-counted', 'true');
+            }
+
+            state.sessions[sessionId] = Date.now();
+            state.active = Object.keys(state.sessions).length;
+            persistState(state);
+            updateDisplay(state);
+            broadcastState(state);
+        }
+
+        function handleIncomingMessage(event) {
+            if (event.data?.type !== 'visitor-sync') return;
+            const incomingState = event.data.state;
+            if (!incomingState) return;
+
+            const normalizedState = pruneSessions({
+                total: incomingState.total || 128,
+                sessions: incomingState.sessions || {}
+            });
+            updateDisplay(normalizedState);
+        }
+
+        if (channel) {
+            channel.addEventListener('message', handleIncomingMessage);
+        }
+
+        window.addEventListener('storage', (event) => {
+            if (event.key === storageKey) {
+                syncState();
+            }
+        });
+
+        window.addEventListener('beforeunload', () => {
+            const state = readState();
+            const remainingSessions = Object.fromEntries(
+                Object.entries(state.sessions || {}).filter(([id]) => id !== sessionId)
+            );
+            const nextState = {
+                total: state.total || 128,
+                sessions: remainingSessions
+            };
+            nextState.active = Object.keys(remainingSessions).length;
+            persistState(nextState);
+            if (channel) channel.close();
+        });
+
+        setInterval(syncState, 5000);
+        syncState();
+    }
+
+    initLiveVisitorCounter();
+
+    // ----------------------------------------------------
     // 10. Git Activity & Live Analytics
     // ----------------------------------------------------
     const githubUsername = 'Maheshbharambe45';

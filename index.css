@@ -1813,6 +1813,34 @@ button, input, textarea {
     width: 100%;
 }
 
+.visitor-card {
+    min-height: 118px;
+}
+
+.visitor-subtext {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-top: 0.15rem;
+}
+
+.visitor-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 0 rgba(34, 197, 80, 0.6);
+    animation: pulse-dot 1.8s infinite;
+}
+
+@keyframes pulse-dot {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 80, 0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(34, 197, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 80, 0); }
+}
+
 .views-badge {
     max-width: 100%;
     height: auto;
