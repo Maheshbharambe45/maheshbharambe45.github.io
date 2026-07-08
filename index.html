@@ -12,7 +12,7 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="index.css?v=4">
+    <link rel="stylesheet" href="index.css?v=5">
 </head>
 <body>
     <!-- Background Grid & Glow Effects -->
@@ -39,6 +39,8 @@
                 <a href="#skills" class="nav-link">Skills</a>
                 <a href="#projects" class="nav-link">Projects</a>
                 <a href="#certifications" class="nav-link">Certifications</a>
+                <a href="#analytics" class="nav-link">Analytics</a>
+                <a href="#sandbox" class="nav-link">Sandbox</a>
                 <a href="#contact" class="nav-link">Contact</a>
             </nav>
 
@@ -532,26 +534,36 @@
                     </div>
                 </div>
 
-                <!-- Interactive Tech Chips Wall -->
-                <div class="tech-wall glass-card">
-                    <span class="wall-title">Tech Inventory</span>
-                    <div class="chips-container">
-                        <span class="interactive-chip"><i class="fa-brands fa-aws"></i> AWS</span>
-                        <span class="interactive-chip"><i class="fa-brands fa-docker"></i> Docker</span>
-                        <span class="interactive-chip"><i class="fa-brands fa-github"></i> Git / GitHub</span>
-                        <span class="interactive-chip"><i class="fa-solid fa-cubes"></i> Kubernetes</span>
-                        <span class="interactive-chip"><i class="fa-solid fa-network-wired"></i> Terraform</span>
-                        <span class="interactive-chip"><i class="fa-brands fa-jenkins"></i> Jenkins</span>
-                        <span class="interactive-chip"><i class="fa-solid fa-gears"></i> Ansible</span>
-                        <span class="interactive-chip"><i class="fa-brands fa-linux"></i> Linux (Ubuntu)</span>
-                        <span class="interactive-chip"><i class="fa-solid fa-gauge-high"></i> Prometheus</span>
-                        <span class="interactive-chip"><i class="fa-solid fa-chart-area"></i> Grafana</span>
-                        <span class="interactive-chip"><i class="fa-brands fa-node-js"></i> Node.js</span>
-                        <span class="interactive-chip"><i class="fa-brands fa-js"></i> JavaScript</span>
-                        <span class="interactive-chip"><i class="fa-brands fa-python"></i> Python</span>
-                        <span class="interactive-chip"><i class="fa-brands fa-html5"></i> HTML5 &amp; CSS3</span>
-                        <span class="interactive-chip"><i class="fa-brands fa-bootstrap"></i> Bootstrap</span>
-                        <span class="interactive-chip"><i class="fa-solid fa-shield-halved"></i> DevSecOps</span>
+                <div class="skills-extra-grid">
+                    <!-- Interactive Tech Chips Wall -->
+                    <div class="tech-wall glass-card">
+                        <span class="wall-title">Tech Inventory</span>
+                        <div class="chips-container">
+                            <span class="interactive-chip"><i class="fa-brands fa-aws"></i> AWS</span>
+                            <span class="interactive-chip"><i class="fa-brands fa-docker"></i> Docker</span>
+                            <span class="interactive-chip"><i class="fa-brands fa-github"></i> Git / GitHub</span>
+                            <span class="interactive-chip"><i class="fa-solid fa-cubes"></i> Kubernetes</span>
+                            <span class="interactive-chip"><i class="fa-solid fa-network-wired"></i> Terraform</span>
+                            <span class="interactive-chip"><i class="fa-brands fa-jenkins"></i> Jenkins</span>
+                            <span class="interactive-chip"><i class="fa-solid fa-gears"></i> Ansible</span>
+                            <span class="interactive-chip"><i class="fa-brands fa-linux"></i> Linux (Ubuntu)</span>
+                            <span class="interactive-chip"><i class="fa-solid fa-gauge-high"></i> Prometheus</span>
+                            <span class="interactive-chip"><i class="fa-solid fa-chart-area"></i> Grafana</span>
+                            <span class="interactive-chip"><i class="fa-brands fa-node-js"></i> Node.js</span>
+                            <span class="interactive-chip"><i class="fa-brands fa-js"></i> JavaScript</span>
+                            <span class="interactive-chip"><i class="fa-brands fa-python"></i> Python</span>
+                            <span class="interactive-chip"><i class="fa-brands fa-html5"></i> HTML5 &amp; CSS3</span>
+                            <span class="interactive-chip"><i class="fa-brands fa-bootstrap"></i> Bootstrap</span>
+                            <span class="interactive-chip"><i class="fa-solid fa-shield-halved"></i> DevSecOps</span>
+                        </div>
+                    </div>
+
+                    <!-- Technical Skill Radar Chart -->
+                    <div class="skills-chart-card glass-card">
+                        <span class="wall-title">Competency Radar</span>
+                        <div class="canvas-wrap">
+                            <canvas id="skillsRadarChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -764,11 +776,203 @@
             </div>
         </section>
 
+        <!-- Analytics Section -->
+        <section class="analytics-section section-padding" id="analytics">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-number">07.</span>
+                    <h2 class="section-title">Git Activity & Analytics</h2>
+                    <div class="section-line"></div>
+                </div>
+
+                <div class="analytics-wrapper">
+                    <!-- Left column: Stats -->
+                    <div class="analytics-stats">
+                        <!-- Profile views card -->
+                        <div class="stats-card glass-card">
+                            <div class="stats-icon c-cyan"><i class="fa-solid fa-eye"></i></div>
+                            <div class="stats-info">
+                                <span class="stats-label">Profile Views</span>
+                                <div class="stats-value-wrap">
+                                    <img src="https://komarev.com/ghpvc/?username=Maheshbharambe45&color=00f2fe&style=flat-square" alt="Mahesh Bharambe Profile Views" class="views-badge">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Public Repos card -->
+                        <div class="stats-card glass-card">
+                            <div class="stats-icon c-purple"><i class="fa-solid fa-code-branch"></i></div>
+                            <div class="stats-info">
+                                <span class="stats-label">Public Repos</span>
+                                <h3 class="stats-value" id="githubRepos">--</h3>
+                            </div>
+                        </div>
+
+                        <!-- Followers card -->
+                        <div class="stats-card glass-card">
+                            <div class="stats-icon c-green"><i class="fa-solid fa-users"></i></div>
+                            <div class="stats-info">
+                                <span class="stats-label">Followers</span>
+                                <h3 class="stats-value" id="githubFollowers">--</h3>
+                            </div>
+                        </div>
+
+                        <!-- Active Years card -->
+                        <div class="stats-card glass-card">
+                            <div class="stats-icon c-yellow"><i class="fa-solid fa-calendar-days"></i></div>
+                            <div class="stats-info">
+                                <span class="stats-label">Active Years</span>
+                                <h3 class="stats-value" id="githubYears">--</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right column: Heatmap -->
+                    <div class="heatmap-card glass-card">
+                        <div class="heatmap-header">
+                            <h3 class="heatmap-title">Contribution Calendar</h3>
+                            <span class="heatmap-subtitle">DevOps lab & codebase commits</span>
+                        </div>
+                        <div class="heatmap-scroll">
+                            <div class="heatmap-grid-container">
+                                <!-- Weekday headers -->
+                                <div class="weekday-labels">
+                                    <span>Mon</span>
+                                    <span>Wed</span>
+                                    <span>Fri</span>
+                                </div>
+                                <div class="heatmap-grid" id="heatmapGrid">
+                                    <!-- Dynamic cells loaded via JS -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="heatmap-footer">
+                            <div class="heatmap-legend">
+                                <span>Less</span>
+                                <span class="legend-cell lvl-0"></span>
+                                <span class="legend-cell lvl-1"></span>
+                                <span class="legend-cell lvl-2"></span>
+                                <span class="legend-cell lvl-3"></span>
+                                <span class="legend-cell lvl-4"></span>
+                                <span>More</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DevOps Sandbox Section -->
+        <section class="sandbox-section section-padding" id="sandbox">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-number">08.</span>
+                    <h2 class="section-title">DevOps Sandbox</h2>
+                    <div class="section-line"></div>
+                </div>
+
+                <div class="sandbox-wrapper">
+                    <!-- CI/CD Pipeline Simulator Card -->
+                    <div class="sandbox-card glass-card pipeline-card">
+                        <div class="sandbox-card-header">
+                            <h3><i class="fa-solid fa-code-commit c-teal"></i> CI/CD Pipeline Simulator</h3>
+                            <button class="btn btn-primary btn-sm" id="pipelineTriggerBtn">
+                                <span class="btn-text">Run Pipeline</span>
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="pipeline-visualizer">
+                            <div class="pipeline-stage active" id="stage-source">
+                                <div class="stage-icon"><i class="fa-brands fa-git-alt"></i></div>
+                                <span class="stage-label">Source</span>
+                                <span class="stage-status"><span class="status-dot success"></span>Ready</span>
+                            </div>
+                            <div class="pipeline-connector" id="conn-1"><div class="connector-line"></div></div>
+                            <div class="pipeline-stage" id="stage-build">
+                                <div class="stage-icon"><i class="fa-brands fa-docker"></i></div>
+                                <span class="stage-label">Build</span>
+                                <span class="stage-status"><span class="status-dot"></span>Idle</span>
+                            </div>
+                            <div class="pipeline-connector" id="conn-2"><div class="connector-line"></div></div>
+                            <div class="pipeline-stage" id="stage-scan">
+                                <div class="stage-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                                <span class="stage-label">Sec Scan</span>
+                                <span class="stage-status"><span class="status-dot"></span>Idle</span>
+                            </div>
+                            <div class="pipeline-connector" id="conn-3"><div class="connector-line"></div></div>
+                            <div class="pipeline-stage" id="stage-deploy">
+                                <div class="stage-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                                <span class="stage-label">Deploy</span>
+                                <span class="stage-status"><span class="status-dot"></span>Idle</span>
+                            </div>
+                        </div>
+
+                        <div class="sandbox-logs-window">
+                            <div class="logs-header">
+                                <span>pipeline-runner.log</span>
+                            </div>
+                            <div class="logs-content" id="pipelineLogs">
+                                <div class="log-line text-muted">[system] Pipeline terminal initialized. Click "Run Pipeline" or type "deploy" in terminal.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kubernetes Cluster Visualizer Card -->
+                    <div class="sandbox-card glass-card k8s-card">
+                        <div class="sandbox-card-header">
+                            <h3><i class="fa-solid fa-cubes c-purple"></i> Kubernetes EKS Visualizer</h3>
+                            <div class="sandbox-actions">
+                                <button class="btn btn-secondary btn-sm" id="k8sScaleBtn"><i class="fa-solid fa-plus"></i> Scale Up</button>
+                                <button class="btn btn-secondary btn-sm" id="k8sOutageBtn"><i class="fa-solid fa-skull-crossbones"></i> Chaos Outage</button>
+                            </div>
+                        </div>
+
+                        <div class="k8s-cluster-visualizer">
+                            <div class="cluster-namespace">
+                                <span>Namespace: <code>production-env</code></span>
+                                <span class="pod-count-tag" id="podCountTag">Active Pods: 4 / 4</span>
+                            </div>
+
+                            <div class="pod-grid" id="podGrid">
+                                <div class="pod-node running active-pod" id="pod-1" data-pod-name="frontend-replica-1" data-ip="10.244.0.11" data-cpu="12%" data-mem="140MB">
+                                    <span class="pod-status-light"></span>
+                                    <span class="pod-name">frontend-replica-1</span>
+                                </div>
+                                <div class="pod-node running active-pod" id="pod-2" data-pod-name="backend-replica-1" data-ip="10.244.0.12" data-cpu="18%" data-mem="244MB">
+                                    <span class="pod-status-light"></span>
+                                    <span class="pod-name">backend-replica-1</span>
+                                </div>
+                                <div class="pod-node running active-pod" id="pod-3" data-pod-name="auth-service-1" data-ip="10.244.0.13" data-cpu="5%" data-mem="98MB">
+                                    <span class="pod-status-light"></span>
+                                    <span class="pod-name">auth-service-1</span>
+                                </div>
+                                <div class="pod-node running active-pod" id="pod-4" data-pod-name="api-gateway-1" data-ip="10.244.0.14" data-cpu="22%" data-mem="180MB">
+                                    <span class="pod-status-light"></span>
+                                    <span class="pod-name">api-gateway-1</span>
+                                </div>
+                            </div>
+
+                            <div class="pod-details-panel" id="podDetailsPanel">
+                                <div class="yaml-header">
+                                    <span>Pod Details (Click a pod node to inspect status)</span>
+                                </div>
+                                <div class="yaml-content" id="podDetailsContent">
+                                    <pre class="yaml-code"># Click on any container pod node above
+# to inspect live Kubernetes metrics</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Contact Section -->
         <section class="contact-section section-padding" id="contact">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-number">07.</span>
+                    <span class="section-number">09.</span>
                     <h2 class="section-title">Get In Touch</h2>
                     <div class="section-line"></div>
                 </div>
@@ -860,6 +1064,6 @@
     <div class="cursor-follower" id="cursorFollower"></div>
 
     <!-- Custom JS -->
-    <script src="app.js?v=4"></script>
+    <script src="app.js?v=5"></script>
 </body>
 </html>

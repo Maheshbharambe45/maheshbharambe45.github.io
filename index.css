@@ -1372,6 +1372,43 @@ button, input, textarea {
     box-shadow: 0 4px 15px rgba(0, 242, 254, 0.1);
 }
 
+.skills-extra-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    align-items: stretch;
+}
+
+.skills-chart-card {
+    padding: clamp(1.25rem, 4.5vw, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.canvas-wrap {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    position: relative;
+}
+
+#skillsRadarChart {
+    width: 100%;
+    height: 100%;
+    max-height: 280px;
+    max-width: 280px;
+}
+
+@media (max-width: 992px) {
+    .skills-extra-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Projects Section Grid */
 .projects-grid {
     display: grid;
@@ -1713,6 +1750,216 @@ button, input, textarea {
     font-weight: 500;
 }
 
+/* Git Activity & Analytics Section styling */
+.analytics-wrapper {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 2.5rem;
+    align-items: stretch;
+}
+
+.analytics-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-content: start;
+}
+
+.stats-card {
+    padding: 1.25rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: 100%;
+}
+
+.stats-icon {
+    font-size: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.stats-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.stats-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stats-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+}
+
+.stats-value-wrap {
+    display: flex;
+    align-items: center;
+    min-height: 2.25rem;
+    width: 100%;
+}
+
+.views-badge {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    border-radius: 3px;
+}
+
+/* Heatmap Card styling */
+.heatmap-card {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.heatmap-header {
+    margin-bottom: 1.5rem;
+}
+
+.heatmap-title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.heatmap-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 0.2rem;
+}
+
+.heatmap-scroll {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.heatmap-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.heatmap-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.heatmap-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.heatmap-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--teal);
+}
+
+.heatmap-grid-container {
+    display: flex;
+    gap: 0.75rem;
+    align-items: start;
+    min-width: max-content;
+}
+
+.weekday-labels {
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    gap: 4px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    padding-top: 15px;
+    line-height: 12px;
+}
+
+.weekday-labels span:nth-child(1) { grid-row: 2; }
+.weekday-labels span:nth-child(2) { grid-row: 4; }
+.weekday-labels span:nth-child(3) { grid-row: 6; }
+
+.heatmap-grid {
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    grid-auto-flow: column;
+    gap: 4px;
+}
+
+.heatmap-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    transition: transform 0.1s ease, background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.2);
+    border-color: rgba(0, 242, 254, 0.6);
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
+    z-index: 10;
+}
+
+.heatmap-cell.lvl-0 { background-color: rgba(255, 255, 255, 0.04); }
+.heatmap-cell.lvl-1 { background-color: rgba(0, 242, 254, 0.18); }
+.heatmap-cell.lvl-2 { background-color: rgba(0, 242, 254, 0.40); }
+.heatmap-cell.lvl-3 { background-color: rgba(0, 242, 254, 0.65); }
+.heatmap-cell.lvl-4 { background-color: rgba(0, 242, 254, 0.95); }
+
+.heatmap-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.legend-cell {
+    width: 10px;
+    height: 10px;
+    border-radius: 1.5px;
+}
+
+/* Custom Tooltip */
+.heatmap-tooltip {
+    position: fixed;
+    background-color: rgba(11, 15, 25, 0.95);
+    border: 1px solid var(--border-glow);
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    pointer-events: none;
+    z-index: 2000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 242, 254, 0.1);
+    max-width: 250px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
     :root {
@@ -1729,6 +1976,11 @@ button, input, textarea {
     
     .certifications-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .analytics-wrapper {
+        grid-template-columns: 1fr;
+        gap: 2rem;
     }
 
     /* Switch to the mobile drawer nav earlier: at tablet/small-laptop
@@ -1916,6 +2168,15 @@ button, input, textarea {
 @media (max-width: 480px) {
     .container {
         padding: 0 1rem;
+    }
+
+    .analytics-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .heatmap-card {
+        padding: 1.25rem;
     }
 
     .main-header {
@@ -2206,4 +2467,282 @@ button, input, textarea {
 @keyframes glow-infinity-anim {
     0%, 100% { filter: drop-shadow(0 0 1px var(--teal)); }
     50% { filter: drop-shadow(0 0 4px var(--teal)); }
+}
+
+/* DevOps Sandbox Styling */
+.sandbox-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: stretch;
+}
+
+.sandbox-card {
+    padding: clamp(1.25rem, 4.5vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.sandbox-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.sandbox-card-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sandbox-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Pipeline visualizer styles */
+.pipeline-visualizer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding: 1rem 0.5rem;
+    position: relative;
+    overflow-x: auto;
+}
+
+.pipeline-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    min-width: 70px;
+    transition: var(--transition-smooth);
+}
+
+.stage-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    transition: var(--transition-smooth);
+    margin-bottom: 0.5rem;
+}
+
+.pipeline-stage.active .stage-icon {
+    border-color: var(--teal);
+    color: var(--teal);
+    background-color: var(--teal-glow);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+}
+
+.pipeline-stage.success .stage-icon {
+    border-color: var(--green);
+    color: var(--green);
+    background-color: rgba(74, 222, 128, 0.05);
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.2);
+}
+
+.pipeline-stage.failed .stage-icon {
+    border-color: var(--red);
+    color: var(--red);
+    background-color: rgba(248, 113, 113, 0.05);
+    box-shadow: 0 0 15px rgba(248, 113, 113, 0.2);
+}
+
+.stage-label {
+    font-size: 0.8rem;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.stage-status {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+    display: inline-block;
+}
+
+.status-dot.success {
+    background-color: var(--green);
+}
+
+.status-dot.running {
+    background-color: var(--teal);
+    animation: statusPulse 1.2s infinite alternate;
+}
+
+.status-dot.failed {
+    background-color: var(--red);
+}
+
+@keyframes statusPulse {
+    from { opacity: 0.4; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1.2); }
+}
+
+.pipeline-connector {
+    flex-grow: 1;
+    height: 2px;
+    background-color: var(--border-color);
+    margin: 0 -10px;
+    transform: translateY(-16px);
+    position: relative;
+    z-index: 1;
+}
+
+.pipeline-connector.active .connector-line {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--purple-accent));
+    animation: lineDeploy 1.5s infinite linear;
+    background-size: 200% 100%;
+}
+
+@keyframes lineDeploy {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+
+/* Logs and YAML Terminals */
+.sandbox-logs-window, .pod-details-panel {
+    background-color: var(--bg-terminal);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+}
+
+.logs-header, .yaml-header {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.logs-content, .yaml-content {
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    height: 160px;
+    overflow-y: auto;
+    line-height: 1.5;
+}
+
+.log-line {
+    display: block;
+    margin-bottom: 0.35rem;
+}
+
+/* K8s Panel Specifics */
+.cluster-namespace {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.pod-count-tag {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.pod-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    min-height: 140px;
+}
+
+.pod-node {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: var(--transition-smooth);
+    cursor: pointer;
+}
+
+.pod-node:hover, .pod-node.selected {
+    border-color: var(--purple-accent);
+    background-color: rgba(168, 85, 247, 0.02);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.08);
+}
+
+.pod-status-light {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+}
+
+.pod-node.running .pod-status-light {
+    background-color: var(--green);
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+}
+
+.pod-node.pending .pod-status-light {
+    background-color: var(--yellow);
+    animation: statusPulse 1s infinite alternate;
+}
+
+.pod-node.failed .pod-status-light {
+    background-color: var(--red);
+    box-shadow: 0 0 8px rgba(248, 113, 113, 0.4);
+}
+
+.pod-name {
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+}
+
+.yaml-code {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--teal);
+}
+
+/* Responsive Sandbox Grid */
+@media (max-width: 992px) {
+    .sandbox-wrapper {
+        grid-template-columns: 1fr;
+    }
 }
