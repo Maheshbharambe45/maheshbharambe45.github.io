@@ -137,6 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
   <span class="c-teal">deploy</span>         - Trigger the visual GitOps CI/CD pipeline
   <span class="c-teal">kubernetes</span>     - Query EKS cluster pod metrics
   <span class="c-teal">contact</span>        - How to get in touch with me
+  <span class="c-teal">chatbot</span>        - Open floating DevOps AI Chatbot assistant
+  <span class="c-teal">ask [query]</span>    - Query chatbot assistant from terminal
   <span class="c-teal">clear</span>          - Clear the screen
   <span class="c-teal">sudo [cmd]</span>      - Try your admin privileges`;
         },
@@ -242,6 +244,16 @@ Type <span class="c-yellow">deploy</span> to trigger a fresh rollout!`;
 🔗 LinkedIn:  <a href="https://linkedin.com/in/mahesh-bharambe" target="_blank" class="c-teal">linkedin.com/in/mahesh-bharambe</a>
 🐙 GitHub:    <a href="https://github.com/Maheshbharambe45" target="_blank" class="c-teal">github.com/Maheshbharambe45</a>
 ⚡ Bento:     <a href="http://bento.me/maheshbharambe" target="_blank" class="c-teal">bento.me/maheshbharambe</a>`;
+        },
+        chatbot: () => {
+            if (window.openChatbot) {
+                window.openChatbot();
+                return `<span class="c-green">Opening DevOps Chatbot Assistant Widget...</span>`;
+            }
+            return `<span class="c-red">Error: Chatbot assistant not initialized.</span>`;
+        },
+        ask: () => {
+            return `<span class="c-yellow">Usage: ask [query]</span> - e.g. <span class="c-teal">ask what are his skills?</span>`;
         }
     };
 
@@ -275,6 +287,18 @@ Type <span class="c-yellow">deploy</span> to trigger a fresh rollout!`;
                     } else if (commands[cleanInput]) {
                         // Standard command
                         createOutputLine(commands[cleanInput]());
+                    } else if (cleanInput.startsWith('ask ')) {
+                        const query = inputVal.substring(4).trim();
+                        if (query) {
+                            if (window.openChatbot) {
+                                window.openChatbot(query);
+                                createOutputLine(`<span class="c-green">Forwarding query to DevOps Chatbot Assistant:</span> "${query}"`);
+                            } else {
+                                createOutputLine(`<span class="c-red">Error: Chatbot assistant not initialized.</span>`);
+                            }
+                        } else {
+                            createOutputLine(`<span class="c-yellow">Usage: ask [query]</span> - e.g. <span class="c-teal">ask what are his skills?</span>`);
+                        }
                     } else if (cleanInput.startsWith('sudo ')) {
                         // Sudo easter egg
                         if (cleanInput === 'sudo rm -rf /') {
@@ -1554,9 +1578,231 @@ status:
         renderPods();
     }
 
+    // ----------------------------------------------------
+    // 11. Chatbot Assistant Logic
+    // ----------------------------------------------------
+    function initChatbotAssistant() {
+        const launcher = document.getElementById('chatbotLauncher');
+        const chatWindow = document.getElementById('chatWindow');
+        const minBtn = document.getElementById('minimizeChatBtn');
+        const closeBtn = document.getElementById('closeChatBtn');
+        const chatBody = document.getElementById('chatBody');
+        const chatMessages = document.getElementById('chatMessages');
+        const inputForm = document.getElementById('chatInputForm');
+        const input = document.getElementById('chatInput');
+        const typingIndicator = document.getElementById('chatTypingIndicator');
+        const chipSuggestions = document.getElementById('chipSuggestions');
+
+        if (!launcher || !chatWindow || !chatBody || !chatMessages || !inputForm || !input) return;
+
+        // Toggle chat window open/close
+        launcher.addEventListener('click', () => {
+            chatWindow.classList.toggle('active');
+            chatWindow.classList.remove('minimized');
+            if (chatWindow.classList.contains('active')) {
+                setTimeout(() => input.focus(), 300);
+                scrollToBottom();
+            }
+        });
+
+        // Minimize window
+        minBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chatWindow.classList.toggle('minimized');
+        });
+
+        // Close window
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chatWindow.classList.remove('active');
+            chatWindow.classList.remove('minimized');
+        });
+
+        // Suggestions chip handler
+        if (chipSuggestions) {
+            chipSuggestions.addEventListener('click', (e) => {
+                const chip = e.target.closest('.suggestion-chip');
+                if (!chip) return;
+                const question = chip.dataset.question || chip.textContent;
+                handleUserMessage(question);
+            });
+        }
+
+        // Form Submit
+        inputForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = input.value.trim();
+            if (message === '') return;
+            handleUserMessage(message);
+            input.value = '';
+        });
+
+        function scrollToBottom() {
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Add message to chat list
+        function appendMessage(sender, content) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-message ${sender}`;
+            
+            const avatarHtml = sender === 'bot' 
+                ? '<div class="message-avatar"><i class="fa-solid fa-robot"></i></div>'
+                : '<div class="message-avatar"><i class="fa-solid fa-user"></i></div>';
+
+            msgDiv.innerHTML = `
+                ${avatarHtml}
+                <div class="message-content">
+                    <p>${content}</p>
+                </div>
+            `;
+
+            chatMessages.appendChild(msgDiv);
+            scrollToBottom();
+            return msgDiv;
+        }
+
+        // Handle user input
+        async function handleUserMessage(text) {
+            // Append User message
+            appendMessage('user', text);
+            
+            // Show typing indicator
+            if (typingIndicator) {
+                typingIndicator.style.display = 'flex';
+            }
+            scrollToBottom();
+
+            // Calculate realistic reading/typing delay (between 800ms and 1500ms)
+            const delay = 800 + Math.random() * 700;
+            await new Promise(resolve => setTimeout(resolve, delay));
+
+            // Hide typing indicator
+            if (typingIndicator) {
+                typingIndicator.style.display = 'none';
+            }
+
+            // Get bot response
+            const botResponse = getBotResponse(text);
+            appendMessage('bot', botResponse);
+        }
+
+        // Response Knowledge Base Matcher
+        function getBotResponse(query) {
+            const cleanQuery = query.toLowerCase().trim();
+
+            // Help command
+            if (cleanQuery === 'help' || cleanQuery === 'h' || cleanQuery.includes('what can you do') || cleanQuery.includes('commands')) {
+                return `I can assist you with details about Mahesh's profile. Try asking about:
+                <br>• <strong>experience</strong> - where he works
+                <br>• <strong>skills</strong> - his cloud/DevOps stack
+                <br>• <strong>projects</strong> - what he has built
+                <br>• <strong>certifications</strong> - course credentials
+                <br>• <strong>contact</strong> - get in touch
+                <br>• <strong>deploy</strong> - triggers sandbox CI/CD pipeline simulation!`;
+            }
+
+            // Experience
+            if (cleanQuery.includes('experience') || cleanQuery.includes('work') || cleanQuery.includes('job') || cleanQuery.includes('career') || cleanQuery.includes('simplyfi') || cleanQuery.includes('sparknet') || cleanQuery.includes('heuristic')) {
+                return `<strong>Mahesh's Career Timeline:</strong>
+                <br>• <strong>SimplyFI Innovations PTE Ltd</strong> (Feb 2026 - Present)
+                <br>Role: DevOps Engineer (Apprenticeship). Containerizing backend applications, CI/CD pipeline monitoring, AWS automation, DevSecOps lifecycle integration.
+                <br>• <strong>SparkNet Innovations</strong> (Jul 2025 - Dec 2025)
+                <br>Role: DevOps Intern. Automated server configurations, managed Linux environments (Ubuntu/RHEL), wrote automation scripts.
+                <br>• <strong>HEURISTIC TECHNOPARK</strong> (Jan 2024 - Mar 2024)
+                <br>Role: Software Intern. Built responsive frontend layouts with Bootstrap, developed Python web parser scripts.`;
+            }
+
+            // Skills
+            if (cleanQuery.includes('skills') || cleanQuery.includes('stack') || cleanQuery.includes('technologies') || cleanQuery.includes('kubernetes') || cleanQuery.includes('docker') || cleanQuery.includes('terraform') || cleanQuery.includes('aws') || cleanQuery.includes('python')) {
+                return `<strong>Technical Stack:</strong>
+                <br>• <strong>Cloud Platforms:</strong> AWS (EC2, VPC, RDS, IAM, EKS)
+                <br>• <strong>Container Tools:</strong> Kubernetes, Docker, Docker Compose
+                <br>• <strong>IaC & Automation:</strong> Terraform, Ansible
+                <br>• <strong>CI/CD & GitOps:</strong> Jenkins, ArgoCD, GitHub Actions
+                <br>• <strong>Monitoring Systems:</strong> Prometheus, Grafana, Alertmanager
+                <br>• <strong>Languages:</strong> Python, JavaScript (ES6+), Bash Shell Scripting, HTML5/CSS3
+                <br>• <strong>Databases:</strong> MongoDB, MySQL, Redis`;
+            }
+
+            // Projects
+            if (cleanQuery.includes('project') || cleanQuery.includes('gitops') || cleanQuery.includes('hotstar') || cleanQuery.includes('vulnerability') || cleanQuery.includes('monitoring')) {
+                return `<strong>Key Projects:</strong>
+                <br>• <strong>Hotstar Clone DevSecOps Pipeline:</strong> Implemented AWS EKS, Terraform, Jenkins, Docker Scout, OWASP ZAP, and Prometheus to secure and scale a web app clone handling 1000+ users.
+                <br>• <strong>Multi-Stage GitOps Pipeline:</strong> Automated app delivery using ArgoCD, Jenkins, and Kubernetes with build checks and notifications.
+                <br>• <strong>AWS Infrastructure-as-Code:</strong> Modular VPC, Multi-AZ RDS MySQL instances, and Auto Scaling groups provisioned via Terraform.
+                <br>• <strong>Cluster Monitoring Dashboard:</strong> Prometheus & Grafana analytics monitoring memory and loads with Alertmanager warnings.`;
+            }
+
+            // Certifications
+            if (cleanQuery.includes('certifications') || cleanQuery.includes('cert') || cleanQuery.includes('postman') || cleanQuery.includes('kodekloud')) {
+                return `<strong>Verified Credentials:</strong>
+                <br>• <strong>100 Days of DevOps</strong> (KodeKloud training in Jenkins, Ansible, Terraform, and K8s)
+                <br>• <strong>KodeKloud Engineer - Docker (Level 1)</strong> (Verified Docker administration)
+                <br>• <strong>API Fundamentals Student Expert</strong> (Postman expert credentials)`;
+            }
+
+            // Contact
+            if (cleanQuery.includes('contact') || cleanQuery.includes('email') || cleanQuery.includes('linkedin') || cleanQuery.includes('bento') || cleanQuery.includes('hire') || cleanQuery.includes('resume') || cleanQuery.includes('reach')) {
+                return `<strong>Get In Touch with Mahesh:</strong>
+                <br>• 📧 Email: <a href="mailto:bharambemahesh7@gmail.com">bharambemahesh7@gmail.com</a>
+                <br>• 🔗 LinkedIn: <a href="https://linkedin.com/in/mahesh-bharambe" target="_blank">mahesh-bharambe</a>
+                <br>• ⚡ Bento: <a href="http://bento.me/maheshbharambe" target="_blank">bento.me/maheshbharambe</a>
+                <br>• 🐙 GitHub: <a href="https://github.com/Maheshbharambe45" target="_blank">Maheshbharambe45</a>`;
+            }
+
+            // Who is Mahesh / About
+            if (cleanQuery.includes('who is') || cleanQuery.includes('about mahesh') || cleanQuery.includes('profile') || cleanQuery.includes('bio') || cleanQuery === 'mahesh') {
+                return `Mahesh Bharambe is a passionate DevOps and Cloud Engineer. He specializes in container administration, Kubernetes cluster scaling, Infrastructure as Code, and secure DevSecOps delivery chains. 
+                <br><br>He is an MCA Class of 2026 Candidate and current DevOps Engineer apprentice at SimplyFI Innovations. His professional motto is <em>"Aim the impossible"</em>.`;
+            }
+
+            // Trigger pipeline simulation
+            if (cleanQuery === 'deploy' || cleanQuery.includes('run pipeline') || cleanQuery === 'pipeline') {
+                const triggerBtn = document.getElementById('pipelineTriggerBtn');
+                if (triggerBtn) {
+                    triggerBtn.click();
+                    return `🚀 <strong>CI/CD GitOps Pipeline simulator triggered!</strong> 
+                    <br>Check the visual status nodes in the <em>DevOps Sandbox</em> section below. It is building and rolling out the container image right now!`;
+                }
+                return `Unable to trigger pipeline simulator. Please check if the sandbox section is active.`;
+            }
+
+            // Clear history
+            if (cleanQuery === 'clear') {
+                setTimeout(() => {
+                    chatMessages.innerHTML = '';
+                    appendMessage('bot', 'Chat history cleared. Ask me anything about Mahesh!');
+                }, 50);
+                return 'Clearing logs...';
+            }
+
+            // Sudo
+            if (cleanQuery.startsWith('sudo')) {
+                return `🔒 <strong>Access Denied:</strong> user is not in the sudoers file. This incident has been logged. 😉`;
+            }
+
+            // Fallback default response
+            return `I'm not sure how to answer that request. 
+            <br><br>Try typing <strong>help</strong> to see what topics I can cover, or click one of the suggested chips below!`;
+        }
+
+        // Global integration for opening chatbot via custom events or CLI
+        window.openChatbot = function(initialQuery = '') {
+            chatWindow.classList.add('active');
+            chatWindow.classList.remove('minimized');
+            setTimeout(() => input.focus(), 300);
+            scrollToBottom();
+            if (initialQuery) {
+                handleUserMessage(initialQuery);
+            }
+        };
+    }
+
     // Initialize section
     fetchGitHubStats();
     generateHeatmap();
     initRadarChart();
     initSandbox();
+    initChatbotAssistant();
 });

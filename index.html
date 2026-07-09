@@ -1065,6 +1065,67 @@
         </div>
     </footer>
 
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget" id="chatbotWidget">
+        <!-- Chatbot Button/Launcher -->
+        <button class="chatbot-launcher" id="chatbotLauncher" aria-label="Open DevOps Assistant" type="button">
+            <span class="launcher-pulse"></span>
+            <i class="fa-solid fa-robot"></i>
+        </button>
+
+        <!-- Chat Window -->
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <span class="chat-status-dot green-pulse"></span>
+                    <div class="chat-header-text">
+                        <h3>DevOps Assistant</h3>
+                        <p>Ask about Mahesh</p>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button id="minimizeChatBtn" title="Minimize Chat" aria-label="Minimize Chat" type="button"><i class="fa-solid fa-minus"></i></button>
+                    <button id="closeChatBtn" title="Close Chat" aria-label="Close Chat" type="button"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <div class="chat-body" id="chatBody">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-message bot">
+                        <div class="message-avatar"><i class="fa-solid fa-robot"></i></div>
+                        <div class="message-content">
+                            <p>Hi! I'm Mahesh's virtual assistant. Ask me anything about his work experience, AWS/DevOps skills, certifications, or projects. You can also type commands!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Typing Indicator -->
+                <div class="typing-indicator" id="chatTypingIndicator" style="display: none;">
+                    <div class="dot-bounce"></div>
+                    <div class="dot-bounce"></div>
+                    <div class="dot-bounce"></div>
+                </div>
+            </div>
+
+            <div class="chat-footer">
+                <div class="chip-suggestions-wrapper">
+                    <div class="chip-suggestions" id="chipSuggestions">
+                        <button class="suggestion-chip" data-question="Who is Mahesh?">Who is Mahesh?</button>
+                        <button class="suggestion-chip" data-question="What is his tech stack?">Tech Stack</button>
+                        <button class="suggestion-chip" data-question="Tell me about his EKS project">EKS Project</button>
+                        <button class="suggestion-chip" data-question="How can I contact him?">Contact Details</button>
+                    </div>
+                </div>
+                <form class="chat-input-area" id="chatInputForm">
+                    <input type="text" id="chatInput" placeholder="Type a message or help..." autocomplete="off" spellcheck="false" aria-label="Type your message">
+                    <button type="submit" id="chatSendBtn" aria-label="Send message">
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Custom Cursor Containers -->
     <div class="custom-cursor" id="customCursor"></div>
     <div class="cursor-follower" id="cursorFollower"></div>
